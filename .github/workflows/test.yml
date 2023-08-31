@@ -21,7 +21,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Run the action
-      id: run-action
+      id: run-action 
       uses: ./
       with:
         function-name: 'test-lambda-function'
