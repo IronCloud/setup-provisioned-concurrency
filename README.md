@@ -76,7 +76,8 @@ Replace `your-github-username` with your GitHub username and `your-lambda-functi
 
 ## Outputs
 
-None.
+- `new-version`: The new version of the Lambda function that was published.
+- `provisioned-concurrency`: The number of provisioned concurrency that was set up.
 
 ## Contributing
 
