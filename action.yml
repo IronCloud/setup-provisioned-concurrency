@@ -17,3 +17,6 @@ runs:
   steps:
     - run: ${{ github.action_path }}/src/entrypoint.sh
       shell: bash
+      env:
+        INPUT_FUNCTION_NAME: ${{ inputs.function-name }}
+        INPUT_PROVISIONED_CONCURRENCY: ${{ inputs.provisioned-concurrency }}
