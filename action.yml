@@ -1,0 +1,19 @@
+name: 'Setup Provisioned Concurrency for AWS Lambda'
+description: 'Sets up provisioned concurrency for a specified AWS Lambda function'
+inputs:
+  function-name:
+    description: 'Name of the AWS Lambda function'
+    required: true
+  provisioned-concurrency:
+    description: 'Number of provisioned concurrency'
+    required: true
+outputs:
+  new-version:
+    description: 'The new version number of the Lambda function'
+  provisioned-concurrency:
+    description: 'The provisioned concurrency count that was set'
+runs:
+  using: 'composite'
+  steps:
+    - run: ${{ github.action_path }}/src/entrypoint.sh
+      shell: bash
