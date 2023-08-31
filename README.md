@@ -5,7 +5,8 @@ This GitHub Action sets up provisioned concurrency for a specified AWS Lambda fu
 ## Prerequisites
 
 - The AWS Lambda function must already exist.
-- AWS credentials must be configured before running this action. We recommend using [`aws-actions/configure-aws-credentials`](https://github.com/aws-actions/configure-aws-credentials) for this.
+- AWS credentials must be configured before running this action. 
+- We recommend using [`aws-actions/configure-aws-credentials`](https://github.com/aws-actions/configure-aws-credentials) for this.
 
 ## IAM Permissions
 
