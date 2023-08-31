@@ -1,5 +1,9 @@
 name: 'Setup Provisioned Concurrency for AWS Lambda'
 description: 'Sets up provisioned concurrency for a specified AWS Lambda function'
+author: 'IronCloud'
+branding:
+  color: orange
+  icon: arrow-up-right
 inputs:
   function-name:
     description: 'Name of the AWS Lambda function'
