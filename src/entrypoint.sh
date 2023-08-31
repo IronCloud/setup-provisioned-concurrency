@@ -20,7 +20,7 @@ echo "Publishing a new version for Lambda function: $INPUT_FUNCTION_NAME..."
 NEW_VERSION=$(aws lambda publish-version --function-name $INPUT_FUNCTION_NAME --query "Version" --output text)
 echo "Successfully published new version: $NEW_VERSION"
 
-echo "::set-output name=new-version::$NEW_VERSION"
+echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
 echo "Setting up provisioned concurrency for version: $NEW_VERSION..."
 aws lambda put-provisioned-concurrency-config \
@@ -29,4 +29,4 @@ aws lambda put-provisioned-concurrency-config \
   --provisioned-concurrent-executions $INPUT_PROVISIONED_CONCURRENCY
 echo "Successfully set up provisioned concurrency for version: $NEW_VERSION"
 
-echo "::set-output name=provisioned-concurrency::$INPUT_PROVISIONED_CONCURRENCY"
+echo "PROVISIONED_CONCURRENCY=$INPUT_PROVISIONED_CONCURRENCY" >> $GITHUB_ENV
