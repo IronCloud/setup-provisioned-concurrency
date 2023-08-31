@@ -35,10 +35,9 @@ jobs:
         echo "Current version is $NEW_VERSION"
         
         # Remove provisioned concurrency
-        aws lambda put-provisioned-concurrency-config \
+        aws lambda delete-provisioned-concurrency-config \
           --function-name test-lambda-function \
-          --qualifier $NEW_VERSION \
-          --provisioned-concurrent-executions 0
+          --qualifier $NEW_VERSION 
         
         # Delete the version
         aws lambda delete-function --function-name test-lambda-function --qualifier $NEW_VERSION
