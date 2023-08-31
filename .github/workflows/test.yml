@@ -11,17 +11,31 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
+        aws-region: us-east-1
 
     - name: Run the action
+      id: run-action
       uses: ./
       with:
         function-name: 'test-lambda-function'
-        provisioned-concurrency: 5
+        provisioned-concurrency: 1
+
+    - name: Cleanup
+      run: |
+        NEW_VERSION=${{ steps.run-action.outputs.new-version }}
+        
+        # Remove provisioned concurrency
+        aws lambda put-provisioned-concurrency-config \
+          --function-name test-lambda-function \
+          --qualifier $NEW_VERSION \
+          --provisioned-concurrent-executions 0
+        
+        # Delete the version
+        aws lambda delete-function --function-name test-lambda-function --qualifier $NEW_VERSION
