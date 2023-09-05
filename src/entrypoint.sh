@@ -30,3 +30,25 @@ aws lambda put-provisioned-concurrency-config \
 echo "Successfully set up provisioned concurrency for version: $NEW_VERSION"
 
 echo "PROVISIONED_CONCURRENCY=$INPUT_PROVISIONED_CONCURRENCY" >> $GITHUB_ENV
+
+# Clean up
+OLDER_VERSIONS=$(aws lambda list-versions-by-function \
+  --function-name $INPUT_FUNCTION_NAME \
+  --query "Versions[?Version!='\$LATEST' && Version!='${NEW_VERSION}'].Version" \
+  --output text)
+
+if [ -z "$OLDER_VERSIONS" ]; then
+  echo "No older versions found. Skipping deletion."
+else
+  for OLD_VERSION in $OLDER_VERSIONS; do
+    echo "Deleting provisioned concurrency for version: $OLD_VERSION..."
+    aws lambda delete-provisioned-concurrency-config \
+      --function-name $INPUT_FUNCTION_NAME \
+      --qualifier $OLD_VERSION || echo "No provisioned concurrency to delete for version: $OLD_VERSION"
+
+    echo "Deleting version: $OLD_VERSION..."
+    aws lambda delete-function \
+      --function-name $INPUT_FUNCTION_NAME \
+      --qualifier $OLD_VERSION || echo "Failed to delete version: $OLD_VERSION"
+  done
+fi
