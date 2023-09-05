@@ -1,6 +1,6 @@
 # Setup Provisioned Concurrency GitHub Action
 
-This GitHub Action sets up provisioned concurrency for a specified AWS Lambda function. It automatically publishes a new version of the Lambda function and then sets up provisioned concurrency for that version.
+This GitHub Action sets up and cleans up provisioned concurrency for a specified AWS Lambda function. It automatically publishes a new version of the Lambda function, sets up provisioned concurrency for that version, and deletes older versions along with their provisioned concurrency configurations.
 
 ## Prerequisites
 
@@ -21,12 +21,15 @@ The AWS credentials used must have the following IAM permissions:
       "Action": [
         "lambda:PublishVersion",
         "lambda:PutProvisionedConcurrencyConfig",
-        "lambda:ListVersionsByFunction"
+        "lambda:ListVersionsByFunction",
+        "lambda:DeleteProvisionedConcurrencyConfig",
+        "lambda:DeleteFunction"
       ],
       "Resource": "arn:aws:lambda:REGION:ACCOUNT_ID:function:FUNCTION_NAME"
     }
   ]
 }
+
 ```
 
 Replace `REGION`, `ACCOUNT_ID`, and `FUNCTION_NAME` with your AWS region, account ID, and the name of your Lambda function, respectively.
@@ -52,14 +55,19 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
 
+    - name: Deploy Chalice App
+      run: |
+        cd my-app/
+        chalice deploy        
+
     - name: Setup Provisioned Concurrency
-      uses: IronCloud/setup-provisioned-concurrency@main
+      uses: IronCloud/setup-provisioned-concurrency@v2
       with:
         function-name: 'your-lambda-function-name'
         provisioned-concurrency: 5

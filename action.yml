@@ -1,5 +1,5 @@
-name: 'Setup Provisioned Concurrency for AWS Lambda'
-description: 'Sets up provisioned concurrency for a specified AWS Lambda function'
+name: 'Setup and Cleanup Provisioned Concurrency for AWS Lambda'
+description: 'Sets up provisioned concurrency for a specified AWS Lambda function and cleans up older versions'
 author: 'IronCloud'
 branding:
   color: orange
