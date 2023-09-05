@@ -7,7 +7,7 @@
 - The action now also cleans up older versions of the Lambda function and their provisioned concurrency configurations.
 
 ### Changed
-- Updated IAM permissions in the README to include lambda:DeleteProvisionedConcurrencyConfig and lambda:DeleteFunction.
+- Updated IAM permissions in the README to include `lambda:DeleteProvisionedConcurrencyConfig` and `lambda:DeleteFunction`.
 
 ### Fixed
 - The action now correctly handles cases where there are no older versions or provisioned concurrency configurations.
