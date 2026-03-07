@@ -1,5 +1,12 @@
 # Changelog
 
+## [v3.0.1] - 2026-03-07
+
+### Changed
+- Replaced real AWS integration test with mock-based tests (faster, no AWS credentials needed).
+- Test workflow now runs on pull requests in addition to pushes to main.
+- Added test cases: basic flow, cleanup disabled, and input validation.
+
 ## [v3.0.0] - 2026-03-07
 
 ### Added
