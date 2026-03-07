@@ -11,16 +11,39 @@ inputs:
   provisioned-concurrency:
     description: 'Number of provisioned concurrency'
     required: true
+  wait-for-ready:
+    description: 'Wait for provisioned concurrency to reach Ready status'
+    required: false
+    default: 'true'
+  wait-timeout:
+    description: 'Seconds to wait for provisioned concurrency to become Ready'
+    required: false
+    default: '300'
+  cleanup:
+    description: 'Whether to clean up old versions after setup'
+    required: false
+    default: 'true'
+  versions-to-keep:
+    description: 'Number of old versions to retain (0 = delete all old versions)'
+    required: false
+    default: '0'
 outputs:
   new-version:
     description: 'The new version number of the Lambda function'
+    value: ${{ steps.main.outputs.new-version }}
   provisioned-concurrency:
     description: 'The provisioned concurrency count that was set'
+    value: ${{ steps.main.outputs.provisioned-concurrency }}
 runs:
   using: 'composite'
   steps:
-    - run: ${{ github.action_path }}/src/entrypoint.sh
+    - id: main
+      run: ${{ github.action_path }}/src/entrypoint.sh
       shell: bash
       env:
         INPUT_FUNCTION_NAME: ${{ inputs.function-name }}
         INPUT_PROVISIONED_CONCURRENCY: ${{ inputs.provisioned-concurrency }}
+        INPUT_WAIT_FOR_READY: ${{ inputs.wait-for-ready }}
+        INPUT_WAIT_TIMEOUT: ${{ inputs.wait-timeout }}
+        INPUT_CLEANUP: ${{ inputs.cleanup }}
+        INPUT_VERSIONS_TO_KEEP: ${{ inputs.versions-to-keep }}
