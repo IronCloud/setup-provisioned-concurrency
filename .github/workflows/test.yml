@@ -42,15 +42,8 @@ jobs:
       run: |
         echo "new-version=${{ steps.run-action.outputs.new-version }}"
         echo "provisioned-concurrency=${{ steps.run-action.outputs.provisioned-concurrency }}"
-
-        if [[ "${{ steps.run-action.outputs.new-version }}" != "42" ]]; then
-          echo "::error::Expected new-version=42, got '${{ steps.run-action.outputs.new-version }}'"
-          exit 1
-        fi
-        if [[ "${{ steps.run-action.outputs.provisioned-concurrency }}" != "3" ]]; then
-          echo "::error::Expected provisioned-concurrency=3, got '${{ steps.run-action.outputs.provisioned-concurrency }}'"
-          exit 1
-        fi
+        [[ "${{ steps.run-action.outputs.new-version }}" == "42" ]]
+        [[ "${{ steps.run-action.outputs.provisioned-concurrency }}" == "3" ]]
 
   test-no-cleanup:
     name: Cleanup disabled
@@ -80,10 +73,8 @@ jobs:
 
     - name: Verify outputs
       run: |
-        if [[ "${{ steps.run-action.outputs.new-version }}" != "10" ]]; then
-          echo "::error::Expected new-version=10, got '${{ steps.run-action.outputs.new-version }}'"
-          exit 1
-        fi
+        echo "new-version=${{ steps.run-action.outputs.new-version }}"
+        [[ "${{ steps.run-action.outputs.new-version }}" == "10" ]]
 
   test-validation:
     name: Input validation
@@ -110,8 +101,5 @@ jobs:
 
     - name: Verify failure
       run: |
-        if [[ "${{ steps.bad-concurrency.outcome }}" != "failure" ]]; then
-          echo "::error::Expected action to fail with invalid concurrency"
-          exit 1
-        fi
+        [[ "${{ steps.bad-concurrency.outcome }}" == "failure" ]]
         echo "Correctly rejected invalid input"

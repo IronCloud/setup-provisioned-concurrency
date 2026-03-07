@@ -140,7 +140,7 @@ if [[ "${INPUT_CLEANUP}" == "true" ]]; then
 
       # Skip alias-protected versions
       if echo "${ALIAS_VERSIONS}" | tr '\t' '\n' | grep -qx "${OLD_VERSION}" 2>/dev/null; then
-        echo "::warning::Skipping version ${OLD_VERSION} — referenced by an alias"
+        echo "Skipping version ${OLD_VERSION} (referenced by an alias)"
         continue
       fi
 
